@@ -1,0 +1,33 @@
+services:
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: aegis-n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=agent
+      - N8N_BASIC_AUTH_PASSWORD=NP59V417468E
+      - TZ=Africa/Algiers
+    volumes:
+      - ./n8n/data:/home/node/.n8n
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: aegis-qdrant
+    restart: unless-stopped
+    ports:
+      - "6333:6333"
+    volumes:
+      - ./qdrant/data:/qdrant/storage
+
+  metabase:
+    image: metabase/metabase:latest
+    container_name: aegis-metabase
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./memory/sql:/data
+    environment:
+      MB_DB_FILE: /data/metabase.db

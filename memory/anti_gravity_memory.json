@@ -1,0 +1,22 @@
+[
+  {
+    "task_id": "task_001",
+    "agent_id": "llm_agent",
+    "plan_id": "plan_001",
+    "goal_id": "goal_mvp_launch",
+    "status": "pending",
+    "output": null,
+    "retries": 0,
+    "timestamp": null
+  },
+  {
+    "task_id": "task_002",
+    "agent_id": "ocr_agent",
+    "plan_id": "plan_001",
+    "goal_id": "goal_mvp_launch",
+    "status": "pending",
+    "output": null,
+    "retries": 0,
+    "timestamp": null
+  }
+]

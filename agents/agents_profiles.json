@@ -1,0 +1,39 @@
+[
+  {
+    "agent_id": "llm_agent",
+    "role": "reasoning_engine",
+    "capabilities": ["Ollama_inference"],
+    "memory": true,
+    "max_retries": 1,
+    "priority": "high",
+    "description": "Handles all reasoning tasks using Ollama models. Receives tasks from Planner through Anti-Gravity."
+  },
+  {
+    "agent_id": "ocr_agent",
+    "role": "document_processing",
+    "capabilities": ["OCR", "n8n_execution"],
+    "memory": false,
+    "max_retries": 2,
+    "priority": "medium",
+    "description": "Extracts data from uploaded documents and performs autofill tasks."
+  },
+  {
+    "agent_id": "security_agent",
+    "role": "detect_exploits",
+    "capabilities": ["Ollama_inference", "n8n_execution"],
+    "memory": true,
+    "max_retries": 2,
+    "priority": "high",
+    "description": "Detects and classifies potential security threats and exploits, logs results in memory."
+  },
+  {
+    "agent_id": "prestashop_agent",
+    "role": "inventory_management",
+    "capabilities": ["n8n_execution", "DB_access"],
+    "memory": true,
+    "max_retries": 1,
+    "priority": "medium",
+    "description": "Handles product updates, stock, lot tracking, DLC/DLUO compliance, and price calculations for PrestaShop."
+  }
+]
+

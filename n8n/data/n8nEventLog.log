@@ -1,0 +1,2 @@
+{"__type":"$$EventMessageAudit","id":"e8fafb4b-835f-4d2b-9b64-507d3023f121","ts":"2026-01-17T15:18:57.654+01:00","eventName":"n8n.audit.user.login.success","message":"n8n.audit.user.login.success","payload":{"userId":"a736f2fe-b98d-49d4-84a2-d994aec632cf","_email":"me@bak-dev.com","_firstName":"Agentic","_lastName":"Worker","globalRole":"global:owner","authenticationMethod":"email"}}
+{"__type":"$$EventMessageConfirm","confirm":"e8fafb4b-835f-4d2b-9b64-507d3023f121","ts":"2026-01-17T15:18:57.655+01:00","source":{"id":"0","name":"eventBus"}}
