@@ -26,7 +26,18 @@ def adjust_project_priorities(projects):
 
 
 def generate_ceo_daily_routine(projects):
-    llm = get_planner_llm()
+    fallback_routine = {
+        "schedule": [
+            {"time": "09:00", "task": "Deep work on top project"},
+            {"time": "13:00", "task": "Execution & follow-ups"},
+            {"time": "16:30", "task": "Review & planning"}
+        ]
+    }
+
+    try:
+        llm = get_planner_llm()
+    except RuntimeError:
+        return fallback_routine
 
     prompt = (
         "You are an elite CEO planner.\n"
@@ -36,16 +47,9 @@ def generate_ceo_daily_routine(projects):
         "{ \"schedule\": [ {\"time\": \"09:00\", \"task\": \"...\"} ] }"
     )
 
-    response = run_planner_prompt(llm, prompt)
-
     try:
+        response = run_planner_prompt(llm, prompt)
         return json.loads(response)
     except Exception:
-        return {
-            "schedule": [
-                {"time": "09:00", "task": "Deep work on top project"},
-                {"time": "13:00", "task": "Execution & follow-ups"},
-                {"time": "16:30", "task": "Review & planning"}
-            ]
-        }
+        return fallback_routine
 

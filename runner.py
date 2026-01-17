@@ -48,9 +48,34 @@ def _debug_log(payload: dict) -> None:
 
 def load_projects():
     """
-    Static loader for now.
-    Replace with DB / API loader later.
+    Load active projects from SQLite database.
+    Falls back to defaults if DB is empty.
     """
+    import sqlite3
+    DB_PATH = "memory/sql/aegis.db"
+    
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        conn.row_factory = sqlite3.Row
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT name, status, priority 
+            FROM projects 
+            WHERE status = 'active'
+            ORDER BY priority DESC
+        """)
+        rows = cur.fetchall()
+        conn.close()
+        
+        if rows:
+            return [
+                Project(row["name"], status=row["status"], priority=row["priority"])
+                for row in rows
+            ]
+    except Exception as e:
+        print(f"⚠ DB load failed: {e}, using defaults")
+    
+    # Fallback to defaults
     return [
         Project("Project Alpha", priority=3),
         Project("Project Beta", priority=2),

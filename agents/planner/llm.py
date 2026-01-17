@@ -1,5 +1,6 @@
 import os
 import json
+import time
 from typing import Optional
 
 import requests
@@ -11,6 +12,18 @@ except ImportError:
         return None
 
 load_dotenv()
+
+
+# #region agent log
+def _debug_log(payload: dict) -> None:
+    try:
+        log_path = "/home/ubuntu/aegis-planner/.cursor/debug.log"
+        with open(log_path, "a", encoding="utf-8") as handle:
+            handle.write(json.dumps(payload) + "\n")
+    except OSError:
+        pass
+# #endregion
+
 
 # Read API key and model from environment
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
@@ -24,12 +37,12 @@ if not OPENROUTER_API_KEY:
         "runId": os.getenv("AEGIS_RUN_ID", "unknown"),
         "hypothesisId": "H1",
         "location": "agents/planner/llm.py:env_check",
-        "message": "OPENROUTER_API_KEY missing",
+        "message": "OPENROUTER_API_KEY missing - LLM features disabled",
         "data": {"has_api_key": False, "model": OPENROUTER_MODEL},
         "timestamp": int(time.time() * 1000)
     })
     # #endregion
-    raise ValueError("OPENROUTER_API_KEY is not set in your environment variables or .env file.")
+    # Don't raise - allow graceful degradation with fallback logic
 
 
 def load_system_prompt(path: str = SYSTEM_PROMPT_PATH) -> str:
@@ -94,7 +107,10 @@ class PlannerLLM:
 def get_planner_llm() -> PlannerLLM:
     """
     Returns a PlannerLLM instance.
+    Raises RuntimeError if API key is missing (caught by caller for fallback).
     """
+    if not OPENROUTER_API_KEY:
+        raise RuntimeError("OPENROUTER_API_KEY not configured")
     return PlannerLLM()
 
 

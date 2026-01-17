@@ -44,7 +44,13 @@ def execute_task(task):
     start_time = datetime.utcnow()
 
     try:
-        if task_type == "shell":
+        if task_type == "human":
+            # Human tasks are reminders/notes - skip execution
+            status = "skipped"
+            result = f"Human task (not executable): {payload}"
+            error = None
+
+        elif task_type == "shell":
             result = subprocess.run(
                 payload, shell=True, capture_output=True, text=True, check=True
             ).stdout
@@ -84,12 +90,13 @@ def execute_task(task):
 
     # Log execution in memory
     memory.log_execution(
-        task_type=task_type,
-        payload=payload,
+        task=f"{task_type}: {payload}",
         status=status,
         result=result,
         error=error,
-        run_time_ms=run_time
+        requested_by="system",
+        dry_run=False,
+        executed_at=datetime.utcnow().isoformat()
     )
 
     return status, result, error
